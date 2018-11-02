@@ -1,18 +1,17 @@
-<body>
-    <header> META SITE </header>
-    <div class="input">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="Inputs">
-                <div class="stringInput">
-                    {{ form.address }}
-                </div>
-                <div class="btnInput">
-                    <button type="submit" class="button">
-                        Add URL
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</body>
+<!DOCTYPE html>
+<html>
+  <body>
+      <header> META SITE </header>
+      <div class="input">
+          <form method="POST">{% csrf_token %}
+              <div class="url">{{ form.address }}</div>
+              <button type="submit" class="button">Add URL</button>
+          </form>
+        <div class="results">
+          {{ table.title }}
+          <br>
+          {{ table.description }}
+        </div>
+      </div>
+  </body>
+</html>
