@@ -1,17 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+      {% load static %}
+    <!-- Bootstrap 3: front-end framework mobile-first responsive design-->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Open Sans Font Link -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    
+    <!-- Ensure proper rendering and touch zooming -->
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
   <body>
-      <header> META SITE </header>
-      <div class="input">
-          <form method="POST">{% csrf_token %}
+    <div class="container-fluid">
+
+        <div class="content row">
+
+          <img class="logo" src="{% static "meta_logo.svg" %}" alt="Meta Logo" >
+
+          <div class="input">
+            <form method="POST">{% csrf_token %}
               <div class="url">{{ form.address }}</div>
               <button type="submit" class="button">Add URL</button>
-          </form>
-        <div class="results">
-          {{ table.title }}
-          <br>
-          {{ table.description }}
+            </form>
+          </div>
+
+          <div class="results">
+            
+            <!--  score currently hardcoded in as 36
+                  once algorithm works import calculated variable-->
+                  <h1 class="score" style="color:#E55100">36</h1>
+            <!--
+            {{ table.title }}
+            <br>
+            {{ table.description }}
+            -->
+            <br>
+              <div class="display row"></div>
+                <img class="colorbar" src="{% static "colorbar.svg" %}" alt="colorbar" >
+              </div>
+
+            <!--  url currently hardcoded
+                  pull url from .py algorithm import url name-->
+            <p class="address">SEO analysis for:<br>url address</p>
+          </div>
+
         </div>
-      </div>
+    </div>
   </body>
+
 </html>
