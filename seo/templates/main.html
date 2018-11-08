@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'main.css' %}">
-    
+
     <!-- Ensure proper rendering and touch zooming -->
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
   </head>
@@ -36,7 +36,7 @@
           </div>
 
           <div class="results">
-            
+
             <!--  score currently hardcoded in as 36
                   once algorithm works import calculated variable-->
                   <h1 class="score" style="color:#E55100">36</h1>
@@ -56,6 +56,22 @@
           </div>
 
         </div>
+    </div>
+    <div class="results-table">
+      <table class="head-table">
+        {% for key,value in table.items %}
+        <tr>
+          <th>
+            {{ key }}
+          </th>
+        </tr>
+        <tr>
+          <td>
+            {{ value }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
   </body>
 
