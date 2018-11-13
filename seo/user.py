@@ -9,3 +9,16 @@ def prompt(feed,options=False,notice=False,custom=False,custom_space=False):
     else:
         inter='%'+str(30)+'s'
         print(str(inter)%str(feed))
+
+
+#Web scraping
+#Demo
+#SEO Intro
+
+#Meta data used
+#Who needs it
+
+#Use Cases
+#Agile
+
+#Live Demo

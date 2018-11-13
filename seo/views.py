@@ -6,6 +6,7 @@ from . import user
 from . import domain
 import time
 import pprint
+import random
 
 def index(request):
     form = UrlForm()
@@ -17,6 +18,9 @@ def index(request):
         user.prompt(feed="______ "+str(url))
         #if len(str(request.POST['address'])) > 6 and 'htt' in str(request.POST['address']):
         if form.is_valid():
+            context.update({'url_address':url})
+            context.update({'score':random.randint(50,100)})
+            
             form.save()
         else:
             user.prompt(feed="wrong format")

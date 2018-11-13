@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from . import user
 import time
 import requests
 import fake_useragent
@@ -13,13 +14,17 @@ class Browser:
 
     def get_random_user_agent(self):
         ua = fake_useragent.UserAgent()
+        user.prompt(feed=str(ua.random))
         return ua.random
 
     def get_response(self,url):
         while True:
             resp = requests.get(self.url)#, headers=self.headers)
             try:
-                return resp
+                if resp.status_code == 200:
+                    return resp
+                else:
+                    return False
             except Exception as e:
                 user.prompt(feed=e)
             time.sleep(2)

@@ -4,14 +4,20 @@ import pprint
 from . import spider
 from . import user
 import pprint
+import random
 
 class Page:
     def __init__(self,url):
         self.url = url
         self.browser = spider.Browser(url)
+
         self.dictionary={}
+
         self.head = self.browser.html.find('head')
         self.dictionary.update(self.elements_to_dictionary(self.head))
+        self.dictionary.update({'url_address':url})
+        self.dictionary.update({'score':random.randint(50,100)})
+        self.dictionary.pop('script')
         pprint.pprint(self.dictionary)
 
     def elements_to_dictionary(self, head_elment):
