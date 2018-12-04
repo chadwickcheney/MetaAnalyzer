@@ -19,8 +19,10 @@ class Browser:
 
     def get_response(self,url):
         while True:
-            resp = requests.get(self.url)#, headers=self.headers)
             try:
+                print("response sent")
+                resp = requests.get(self.url)#, headers=self.headers)
+                print("response received")
                 if resp.status_code == 200:
                     return resp
                 else:

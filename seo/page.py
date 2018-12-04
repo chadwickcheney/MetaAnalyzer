@@ -18,18 +18,19 @@ class Page:
         self.dictionary.update({'url_address':url})
         self.dictionary.update({'score':random.randint(30,70)})
         self.dictionary.pop('script')
-        pprint.pprint(self.dictionary)
+        self.dictionary.pop('link')
+        #pprint.pprint(self.dictionary)
 
     def elements_to_dictionary(self, head_elment):
         dictionary={}
         for e in head_elment:
             if 'bs4.element.Tag' in str(type(e)):
-                user.prompt(feed="element_name: "+str(e.name), custom=True, custom_space=15)
+                #user.prompt(feed="element_name: "+str(e.name), custom=True, custom_space=15)
                 key = e.name
                 sub_dictionary = {}
                 if len(e.attrs) > 1:
                     for attribute in e.attrs:
-                        user.prompt(feed="element_attribute: "+str(e[attribute]), custom=True, custom_space=30)
+                        #user.prompt(feed="element_attribute: "+str(e[attribute]), custom=True, custom_space=30)
                         sub_key = attribute
                         sub_dictionary.update(self.safe_store(sub_key, e[attribute], sub_dictionary))
                 else:
@@ -42,13 +43,14 @@ class Page:
 
     def find_tag(self, e, array):
         for a in array:
-            user.prompt(feed="looking for "+str(a),custom=True,custom_space=15)
+            #user.prompt(feed="looking for "+str(a),custom=True,custom_space=15)
             try:
                 var = e[str(a)]
-                user.prompt(feed='found '+str(a)+ ": "+str(var),custom=True,custom_space=30)
+                #user.prompt(feed='found '+str(a)+ ": "+str(var),custom=True,custom_space=30)
                 return var
             except Exception as error:
-                user.prompt(feed="error: "+str(error),custom=True,custom_space=45)
+                #user.prompt(feed="error: "+str(error),custom=True,custom_space=45)
+                num8=0
         return False
 
     def safe_store(self, key, value, dictionary):

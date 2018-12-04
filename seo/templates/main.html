@@ -34,17 +34,11 @@
               <button type="submit" class="button" onclick="function()">Add URL</button>
             </form>
           </div>
-
+          <div>
+            <h2 class="errorMsg">{{ error_message }}</h2>
+          </div>
           <div class="results">
-
-            <!--  score currently hardcoded in as 36
-                  once algorithm works import calculated variable-->
                   <h1 class="score" style="color:#5C6BC0">{{ table.score }}</h1>
-            <!--
-            {{ table.title }}
-            <br>
-            {{ table.description }}
-            -->
             <br>
               <div class="display row"></div>
                 <img class="colorbar" src="{% static "colorbar.svg" %}" alt="colorbar" >

@@ -7,6 +7,7 @@ from . import domain
 import time
 import pprint
 import random
+import validators
 
 def index(request):
     form = UrlForm()
@@ -15,17 +16,26 @@ def index(request):
     if request.method == 'POST':
         form = UrlForm(request.POST)
         url = request.POST['address']
-        user.prompt(feed="______ "+str(url))
-        #if len(str(request.POST['address'])) > 6 and 'htt' in str(request.POST['address']):
-        if form.is_valid():
-            context.update({'url_address':url})
-            context.update({'score':random.randint(50,100)})
-            
-            form.save()
+        user.prompt(feed="url enetered: "+str(url))
+        is_valid = is_valid_url(url)
+        if is_valid:
+            if form.is_valid():
+                print("url: "+str(url))
+                context.update({'url_address':url})
+                context.update({'score':random.randint(50,100)})
+                form.save()
+            else:
+                user.prompt(feed="wrong format")
+            if url:
+                d = domain.Domain(request,url)
+                context.update({'table':d.post_table})
         else:
-            user.prompt(feed="wrong format")
-    if url:
-        d = domain.Domain(request,url)
-        context.update({'table':d.table})
+            context.update({'error_message':"invalid format"})
     context.update({'form':form})
     return render(request,'main.html',context)
+
+def is_valid_url(url):
+    print(validators.url(url))
+    if not validators.url(url):
+        return False
+    return True
