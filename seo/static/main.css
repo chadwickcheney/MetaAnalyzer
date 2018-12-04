@@ -51,6 +51,7 @@ input {
     font-weight: 800;
     text-align: center;
     margin-bottom: 25px;
+    height: 100px;
 }
 
 .address {

@@ -16,7 +16,7 @@ class Page:
         self.head = self.browser.html.find('head')
         self.dictionary.update(self.elements_to_dictionary(self.head))
         self.dictionary.update({'url_address':url})
-        self.dictionary.update({'score':random.randint(50,100)})
+        self.dictionary.update({'score':random.randint(30,70)})
         self.dictionary.pop('script')
         pprint.pprint(self.dictionary)
 
