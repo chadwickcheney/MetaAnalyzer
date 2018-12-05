@@ -1,6 +1,7 @@
 from . import page
 from . import user
 import pprint
+import time
 
 class Domain:
     def __init__(self,request,url):
@@ -10,49 +11,65 @@ class Domain:
         self.post_table = self.organize_table()
 
     def get_table_data(self):
-        #return self.post_table.dictionary
-        return {"blank":None}
+        return self.post_table.dictionary
+        #return {"blank":None}
 
     def organize_table(self):
-        '''array=["title","description","viewport","social media"]
-        for a in array:
-            for key in self.table.keys():
-                user.prompt(feed="\nkey__________________________\n"+str(key)+"\n", custom=50)
-
-                if 'dict' in str(type(self.table[key])):
-                    for subkey in self.table[key].keys():
-                        user.prompt(feed="\nsubkey__________________________\n"+str(subkey)+"\n", custom=50)
-
-                        value = self.get_value_safe(self.table, key, subkey)
-                        if "str" in str(type(value)):
-                            print(value)
-
-                        if 'dict' in str(type(self.table[key][subkey])):
-                            for subsubkey in self.table[key][subkey].keys():
-                                user.prompt(feed="\nsubsubkey__________________________\n"+str(subsubkey)+"\n", custom=50)
-
-                                value = self.get_value_safe(self.table, key, subkey, subsubkey)
-                                if "str" in str(type(value)):
-                                    print(value)
-
-                else:
-                    value = self.get_value_safe(self.table, key)
-                    if "str" in str(type(value)):
-                        print(value)'''
-
         dictionary = {}
         meta_dict = self.table.pop('meta')
 
         id_array=["itemprop", "name", "property"]
         matter_array=["content"]
-        pprint.pprint(meta_dict)
-        for key in meta_dict.keys():
-            dictionary.update(self.safe_update(meta_dict[key], "description", id_array, matter_array))
-            dictionary.update(self.safe_update(meta_dict[key], "name", id_array, matter_array))
-            dictionary.update(self.safe_update(meta_dict[key], "viewport", id_array, matter_array))
-            dictionary.update(self.safe_update(meta_dict[key], "image", id_array, matter_array))
-            dictionary.update(self.safe_update(meta_dict[key], "keywords", id_array, matter_array))
-        pprint.pprint(dictionary)
+
+        #organize meta
+        dictionary.update({"title":self.table['title']})
+        dictionary.update(self.safe_update(meta_dict, "description", id_array, matter_array))
+        dictionary.update(self.safe_update(meta_dict, "name", id_array, matter_array))
+        dictionary.update(self.safe_update(meta_dict, "viewport", id_array, matter_array))
+        dictionary.update(self.safe_update(meta_dict, "image", id_array, matter_array))
+        dictionary.update(self.safe_update(meta_dict, "keywords", id_array, matter_array))
+
+        #social media
+        #Facebook
+        facebook_dictionary={}
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:title', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:type', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:url', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:image', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:description', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'og:site_name', id_array, matter_array))
+        facebook_dictionary.update(self.safe_update(meta_dict, 'fb:admins', id_array, matter_array))
+
+        #Twitter
+        twitter_dictionary={}
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:card', id_array, matter_array))
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:site', id_array, matter_array))
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:title', id_array, matter_array))
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:description', id_array, matter_array))
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:creator', id_array, matter_array))
+        twitter_dictionary.update(self.safe_update(meta_dict, 'twitter:image:src', id_array, matter_array))
+
+        social_media_dictionary={}
+        social_media_dictionary.update({"facebook":facebook_dictionary})
+        social_media_dictionary.update({"twitter":twitter_dictionary})
+
+        dictionary.update({"social media":social_media_dictionary})
+
+        sc = self.score(dictionary,{"score":0,"count":0})
+        dictionary.update({"score": str(int(round(float( float(sc['score'] / sc['count']) * 100.00 ), 0))) })
+
+        return dictionary
+
+    def score(self, d, sc):
+        for k, v in d.items():
+            sc.update({"count":sc['count']+1})
+            if not v == None:
+                sc.update({"score":sc['score']+1})
+            if isinstance(v, dict):
+                return self.score(v, sc)
+            else:
+                print("{0} : {1}".format(k, v))
+        return sc
 
     def get_value_safe(self, dict, key, subkey=None, subsubkey=None):
         try:
@@ -68,21 +85,39 @@ class Domain:
         except:
             return False
 
-    def safe_update(self, dict, lookup, ids, matters):
-        key=None
-        value=None
+    def safe_update(self, dict, lookup, ids, matters, contains=False):
+        return_dictionary={}
         if 'dict' in str(type(dict)):
-            for i in ids:
-                try:
-                    key = dict[i]
-                    for matter in matters:
+            for meta_key in dict.keys():
+                dict_entry = dict[meta_key]
+                key=None
+                value=None
+                if 'dict' in str(type(dict_entry)):
+                    for i in ids:
                         try:
-                            value = dict[matter]
-                            if key == lookup:
-                                user.prompt(feed="found match: "+str(key)+": "+str(value), custom=75)
-                            return {key:value}
-                        except:
-                            num7=0
-                except:
-                    num7=0
-        return {lookup:None}
+                            key = dict_entry[i]
+                            for matter in matters:
+                                try:
+                                    value = dict_entry[matter]
+                                    if contains:
+                                        if str(lookup).lower() in str(key).lower():
+                                            user.prompt(feed="found match: "+str(key)+": "+str(value), custom=75)
+                                            return_dictionary.update({key:value})
+                                            break
+                                    else:
+                                        if key == lookup:
+                                            user.prompt(feed="found match: "+str(key)+": "+str(value), custom=75)
+                                            return_dictionary.update({key:value})
+                                            break
+                                except Exception as e:
+                                    num8=0
+                                    #user.prompt(feed=str(e), notice=True)
+                        except Exception as e:
+                            num8=0
+                            #user.prompt(feed=str(e), notice=True)
+
+        #validate this dictionary before returning
+        if not lookup in return_dictionary.keys():
+            return_dictionary.update({lookup:None})
+        user.prompt(feed=return_dictionary, type_of=True)
+        return return_dictionary

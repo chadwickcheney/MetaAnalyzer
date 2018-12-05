@@ -17,9 +17,7 @@ class Page:
         self.dictionary.update(self.elements_to_dictionary(self.head))
         self.dictionary.update({'url_address':url})
         self.dictionary.update({'score':random.randint(30,70)})
-        self.dictionary.pop('script')
-        self.dictionary.pop('link')
-        #pprint.pprint(self.dictionary)
+        pprint.pprint(self.dictionary)
 
     def elements_to_dictionary(self, head_elment):
         dictionary={}
@@ -54,18 +52,6 @@ class Page:
         return False
 
     def safe_store(self, key, value, dictionary):
-        '''#1 key = title, value = Engine 0
-        #2 key = title, value = Engine 1 = > key = title, value = {1: Engine 0, 2:Engine 1}
-        if multi:
-            if not key in dictionary.keys():
-                dictionary.update({key:value})
-            else:
-                print(str(key)+"<=key | value=>"+str(value))
-                index = len(dictionary[key].keys())
-                index_dictionary={}
-                index_dictionary.update({index:value})
-                dictionary[key].update({index:value})
-        else:'''
         if not key in dictionary.keys():
             dictionary.update({key:value})
         else:
