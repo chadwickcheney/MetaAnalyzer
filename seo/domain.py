@@ -55,6 +55,7 @@ class Domain:
 
         dictionary.update({"social media":social_media_dictionary})
 
+        print("\n\n\n\n\nSCORE")
         sc = self.score(dictionary,{"score":0,"count":0})
         dictionary.update({"score": str(int(round(float( float(sc['score'] / sc['count']) * 100.00 ), 0))) })
 
@@ -63,12 +64,11 @@ class Domain:
     def score(self, d, sc):
         for k, v in d.items():
             sc.update({"count":sc['count']+1})
-            if not v == None:
+            if not ( v == None or str(v) == 'None' or len(str(v)) < 2 or isinstance(v, dict)):
                 sc.update({"score":sc['score']+1})
+                print(str(k)+" : "+str(v))
             if isinstance(v, dict):
                 return self.score(v, sc)
-            else:
-                print("{0} : {1}".format(k, v))
         return sc
 
     def get_value_safe(self, dict, key, subkey=None, subsubkey=None):
